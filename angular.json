@@ -25,9 +25,18 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/sweetalert2/dist/sweetalert2.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@fortawesome/fontawesome-free/js/all.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/sweetalert2/dist/sweetalert2.min.js",
+              "src/assets/app.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -60,10 +69,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app_client:build:production"
+              "browserTarget": "app_client:build:production",
+              "proxyConfig": "proxy.conf.json"
             },
             "development": {
-              "browserTarget": "app_client:build:development"
+              "browserTarget": "app_client:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
