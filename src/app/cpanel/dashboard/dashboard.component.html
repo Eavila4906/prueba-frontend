@@ -1,0 +1,59 @@
+<h1 class="h3 d-inline align-middle">Bienvenido: {{name + ' ' + lastname}}</h1>
+
+<h5 class="mt-4">Última sesión activa: </h5>
+
+<table>
+    <tr>
+        <th>Intentos fallidos: </th>
+        <td>{{attempts}}</td>
+    </tr>
+    <tr>
+        <th>Hora de inicio: </th>
+        <td>{{start_date}}</td>
+    </tr>
+    <tr>
+        <th>Hora fin: </th>
+        <td>
+            {{departure_date === '1' ? 'Actualmente activo' : departure_date}}
+            <span *ngIf="departure_date === '1'"><i class="fas fa-circle fa-sm text-success"></i></span>
+        </td>
+    </tr>
+</table>
+
+<div *ngIf="role === 'ADMINISTRADOR'">
+    <h5 class="mt-4">Indicadores de usuarios: </h5>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Sesión activa</h4>
+                <p>{{online}}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Bloqueados</h4>
+                <p>{{locked}}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Inactivos</h4>
+                <p>{{offline}}</p>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mt-4">Intentos de inicios de sesión fallidos:</h5>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger" role="alert" *ngIf="failedAttempts > 0 ; else block">
+                <p>Se han registrado {{failedAttempts}} intentos de inicio de sesión fallidos.</p>
+            </div>
+            <ng-template #block>
+                <div class="alert alert-danger" role="alert">
+                    <p>No se han registrado ningun intento de inicio de sesión fallido.</p>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

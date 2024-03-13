@@ -1,0 +1,173 @@
+<div class="mb-3">
+    <div>
+        <h1 class="h3 d-inline align-middle">Lista de usuarios </h1>
+        <button class="btn btn-success" (click)="openModalBulkLoad()">
+            Carga masiva
+            <i class="fas fa-users"></i>
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Usuario</th>
+                                <th>Correo electrónico</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users">
+                                <td>{{ user.idUser }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.mail }}</td>
+                                <td>
+                                    <span *ngIf="user.status == '1'">
+                                        Activo <i class="fas fa-circle fa-sm text-success"></i>
+                                    </span>
+                                    <span *ngIf="user.status == '0'">
+                                        Inactivo <i class="fas fa-circle fa-sm text-warning"></i>
+                                    </span>
+                                    <span *ngIf="user.status == 'LOCKED'">
+                                        Bloqueado <i class="fas fa-circle fa-sm text-danger"></i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        <button class="ms-1 btn btn-primary btn-sm" title="Editar"
+                                            (click)="openModalEditUser(user.idUser)">
+                                            <i class="fas fa-pencil"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #ModalBulkLoad="bs-modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h3 class="modal-title text-white fs-2 fw-bolder"><i class="fas fa-users"></i> Carga masiva de usuarios
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="ModalBulkLoad.hide()"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="form-CreateUser" class="form-horizontal">
+                    <p class="text-success">
+                        Los campos con asterisco (*) son obligatorios.
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Selecciona un archivo</label>
+                        <input class="form-control" type="file" id="file" (change)="onFileSelected($event)">
+                    </div>
+
+                    <div class="table-responsive mt-4" *ngIf="showTable">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Apellidos</th>
+                                    <th>Usuario</th>
+                                    <th>Contrasena</th>
+                                    <th>Identificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let fila of data">
+                                    <td *ngFor="let campo of fila">{{ campo }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-danger" (click)="ModalBulkLoad.hide()">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #ModalEditedUser="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+  data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h3 class="modal-title text-white fs-2 fw-bolder"><i class="fas fa-user-edit"></i> Editar usuario</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="ModalEditedUser.hide()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="form-UpdateUser" class="form-horizontal" (submit)="editedUser(idUser)">
+          <p class="text-primary">
+            Los campos con asterisco (*) son obligatorios.
+          </p>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label id="labelNames" class="labelForm">Nombres *</label>
+              <input class="form-control" type="text" name="name" [(ngModel)]="name" value={{name}} required>
+            </div>
+            <div class="col-md-6">
+              <label id="labelLastName" class="labelForm">Apellidos *</label>
+              <input class="form-control" type="text" name="lastname" [(ngModel)]="lastname" value={{lastname}} required>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label id="labelEmail" class="labelForm">Correo electrónico *</label>
+                <input class="form-control" type="email" name="email" [(ngModel)]="mail" value={{mail}} required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label>Estado *</label>
+              <select class="form-control" name="status" [(ngModel)]="status" required>
+                <option class="d-none" value={{status}} selected>
+                  <span *ngIf="status == '1'">
+                    Activo
+                  </span>
+                  <span *ngIf="status == '0'">
+                    Inactivo
+                  </span>
+                  <span *ngIf="status == 'LOCKED'">
+                    Bloqueado
+                  </span>
+                </option>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+                <option value="LOCKED">Bloqueado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Confirmar</button>
+            <button type="button" class="btn btn-danger" (click)="ModalEditedUser.hide()">Cerrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
